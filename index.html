@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pedro Coulter — AI automation</title>
+<meta name="description" content="I build AI assistants and workflow automations that run in production for small businesses. Operations background, n8n, Claude API, Supabase.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1F4F2;
+  --panel:#E3E9E6;
+  --ink:#172A3A;
+  --muted:#4E606C;
+  --line:#C9D3CF;
+  --teal:#0F7F80;
+  --amber:#D9912B;
+  --measure:40rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1B24; --panel:#172733; --ink:#E6EDEA; --muted:#9DB0B8; --line:#2A3C48; --teal:#3FB8B5; --amber:#E9A94A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1.0625rem/1.6 "Public Sans",system-ui,sans-serif}
+a{color:var(--teal);text-underline-offset:.18em}
+a:focus-visible,button:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:2px}
+.wrap{max-width:68rem;margin:0 auto;padding:0 1.25rem}
+h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;line-height:1.08;margin:0}
+p{margin:0 0 1rem;max-width:var(--measure)}
+
+/* hero */
+header.hero{padding:4.5rem 0 3.5rem}
+.who{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:3.5rem;color:var(--muted);font-size:.95rem}
+.who strong{color:var(--ink);font-weight:600}
+.hero h1{font-size:clamp(2.4rem,6.4vw,4.9rem);font-weight:800;letter-spacing:-.025em;max-width:15ch}
+.hero .lede{font-size:1.2rem;color:var(--muted);margin-top:1.4rem;max-width:36rem}
+
+/* the one moment: month-end close collapsing */
+.close{margin-top:3.2rem;max-width:52rem}
+.close h2{font-size:1rem;font-weight:600;font-family:"Public Sans",sans-serif;margin-bottom:.9rem}
+.track{position:relative;height:3.4rem;background:var(--panel);border-radius:6px;overflow:hidden}
+.bar{position:absolute;inset:0 auto 0 0;width:100%;background:repeating-linear-gradient(90deg,var(--ink) 0 calc(100%/16 - 2px),transparent calc(100%/16 - 2px) calc(100%/16));opacity:.85;transform-origin:left;animation:shrink 2.4s cubic-bezier(.7,0,.2,1) .6s forwards}
+.bar.after{background:var(--teal);opacity:1;width:18.75%;transform:scaleX(0);animation:grow .5s ease-out 2.9s forwards}
+.scale{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-top:.5rem}
+.close .read{margin-top:1rem;font-size:1.05rem}
+.close .read b{color:var(--teal)}
+@keyframes shrink{to{width:18.75%;opacity:0}}
+@keyframes grow{to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){
+  .bar{animation:none;opacity:0}
+  .bar.after{animation:none;transform:none}
+}
+
+/* work */
+section{padding:3.5rem 0;border-top:1px solid var(--line)}
+section > .wrap > h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:600;letter-spacing:-.01em;margin-bottom:2.2rem}
+.case{display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr);gap:1.5rem 3rem;padding:2.2rem 0;border-top:1px solid var(--line)}
+.case:first-of-type{border-top:0;padding-top:0}
+.case h3{font-size:1.55rem;font-weight:600;letter-spacing:-.01em}
+.case .client{color:var(--muted);font-size:.95rem;margin-top:.4rem}
+.case .status{display:inline-block;margin-top:.8rem;font-size:.85rem;color:var(--teal);font-weight:600}
+.nums{display:flex;flex-wrap:wrap;gap:1.2rem 2.4rem;margin:1.2rem 0 1.4rem}
+.nums div{min-width:7rem}
+.nums b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:2rem;font-weight:800;line-height:1;letter-spacing:-.02em}
+.nums span{font-size:.9rem;color:var(--muted)}
+.how{margin:0;padding:0 0 0 1.1rem;max-width:var(--measure)}
+.how li{margin:.35rem 0}
+.stack{font-size:.92rem;color:var(--muted);margin-top:1rem}
+
+.small{display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:2rem 3rem}
+.small h3{font-size:1.2rem;font-weight:600;margin-bottom:.5rem}
+.small p{font-size:.98rem}
+
+/* process: a real sequence */
+ol.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:2rem}
+ol.steps li{counter-increment:s}
+ol.steps li::before{content:counter(s);display:block;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:2.4rem;color:var(--teal);line-height:1;margin-bottom:.6rem}
+ol.steps h3{font-size:1.15rem;font-weight:600;margin-bottom:.4rem}
+ol.steps p{font-size:.98rem}
+
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:1.5rem 3rem}
+.tools h3{font-size:1rem;font-family:"Public Sans",sans-serif;font-weight:600;margin-bottom:.3rem}
+.tools p{font-size:.98rem;color:var(--muted)}
+
+footer{padding:4rem 0 5rem;border-top:1px solid var(--line)}
+footer h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-.02em;max-width:18ch;margin-bottom:1.4rem}
+.contact{display:flex;flex-wrap:wrap;gap:.8rem 2rem;font-size:1.1rem}
+.contact a{font-weight:600}
+.fine{margin-top:2.5rem;font-size:.9rem;color:var(--muted)}
+
+@media (max-width:720px){
+  header.hero{padding:2.5rem 0 2.5rem}
+  .who{margin-bottom:2.2rem}
+  .case{grid-template-columns:1fr;gap:.6rem}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="who"><span><strong>Pedro Coulter</strong>, La Plata, Argentina (UTC−3)</span><a href="mailto:peecoulter7@gmail.com">peecoulter7@gmail.com</a></div>
+    <h1>I automate the back office I used to run by hand.</h1>
+    <p class="lede">Four years in operations, then I started building the tools. Today I design and run AI assistants and workflow automations in production for small businesses, from mapping the process to supporting it after launch.</p>
+
+    <div class="close" aria-labelledby="close-title">
+      <h2 id="close-title">Month-end close at a student residence, before and after I automated it</h2>
+      <div class="track" role="img" aria-label="Month-end close went from two working days to about three hours">
+        <div class="bar"></div>
+        <div class="bar after"></div>
+      </div>
+      <div class="scale"><span>0 h</span><span>1 day</span><span>2 days</span></div>
+      <p class="read">Two working days of manual entry became <b>about three hours</b>, with bank and books reconciling to zero.</p>
+    </div>
+  </div>
+</header>
+
+<section id="work">
+  <div class="wrap">
+    <h2>Selected work</h2>
+
+    <article class="case">
+      <div>
+        <h3>WhatsApp assistant for a gym</h3>
+        <p class="client">Espacio Solé, Gonnet, Argentina. 2,400 members.</p>
+        <span class="status">In production since June 2026</span>
+      </div>
+      <div>
+        <p>Members ask about schedules, fees and classes on WhatsApp. The front desk was answering all of it by hand. The assistant answers on its own and only hands over to staff when a sale is ready to close.</p>
+        <div class="nums">
+          <div><b>93%</b><span>of conversations solved without staff</span></div>
+          <div><b>~350</b><span>replies a month</span></div>
+          <div><b>0</b><span>technical failures in 1,400+ replies</span></div>
+        </div>
+        <ul class="how">
+          <li>Started as a 51-node n8n workflow; migrated to native tool use on the Claude API to make it simpler and more reliable.</li>
+          <li>Knowledge base with semantic retrieval and prompt caching; answers stay inside what the gym actually offers.</li>
+          <li>Postgres on Supabase with separate schemas for the bot runtime and the admin panel, row-level security on every table.</li>
+          <li>Every change is tested against a regression suite of 295 audited real conversations before it ships.</li>
+        </ul>
+        <p class="stack">Claude API, n8n (self-hosted, Docker), WhatsApp Cloud API, Supabase, Next.js admin panel</p>
+      </div>
+    </article>
+
+    <article class="case">
+      <div>
+        <h3>Finance automation for a student residence</h3>
+        <p class="client">Casa Rica Obelisco, La Plata. I was the administrator.</p>
+        <span class="status">In daily use</span>
+      </div>
+      <div>
+        <p>I handled the company’s treasury: payments, transfers, collections and the month-end close. Instead of living in spreadsheets, I automated the parts that repeated every month.</p>
+        <div class="nums">
+          <div><b>2 days → 3 h</b><span>month-end close</span></div>
+          <div><b>0</b><span>difference, bank vs. books</span></div>
+        </div>
+        <ul class="how">
+          <li>Automatic ingestion of bank movements into the accounting system, including parsing credit-card statements from PDF.</li>
+          <li>Invoice files renamed and filed automatically by an n8n workflow.</li>
+          <li>Replaced the cash-flow spreadsheet with a web app that projects the bank balance day by day, so the team knows ahead of time how much money is needed and when.</li>
+        </ul>
+        <p class="stack">n8n, Python, Next.js, Supabase, Vercel</p>
+      </div>
+    </article>
+
+    <article class="case">
+      <div>
+        <h3>Visit booking and referrals for a coliving</h3>
+        <p class="client">Wanna Colive, Argentina.</p>
+        <span class="status">In production</span>
+      </div>
+      <div>
+        <p>Prospects used to book visits by message, and follow-up depended on someone remembering. The platform schedules visits, tracks each prospect through to move-in, and notifies the sales team automatically. A referral system rewards residents who bring new ones.</p>
+        <p class="stack">Next.js, Supabase with RLS, n8n orchestration, Vercel</p>
+      </div>
+    </article>
+
+    <div class="small" style="margin-top:2.5rem">
+      <div>
+        <h3>Commercial analysis for a 45-unit hotel</h3>
+        <p>Three years of booking data plus 9,000 staff messages, processed and analyzed. The bottleneck wasn’t the number of quotes but conversion on the direct channel, and a sales portal’s decline came from a broken listing, not visibility.</p>
+      </div>
+      <div>
+        <h3>Investment reporting system</h3>
+        <p>A personal Python tool that pulls balances from exchanges and a broker through their APIs and computes real returns in US dollars, adjusting each position by the exchange rate on its purchase date.</p>
+      </div>
+      <div>
+        <h3>Property management</h3>
+        <p>I manage five rental units: contracts, rent updates, utilities, collections. It keeps me close to the kind of small-business operations I automate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <h2>How I work with a team</h2>
+    <ol class="steps">
+      <li><h3>Map the process</h3><p>I sit with the people doing the work and find where the time actually goes, before touching any tool.</p></li>
+      <li><h3>Build the smallest useful version</h3><p>Something real people use in days, not a demo. Usually n8n plus an LLM, and a small app when the process needs one.</p></li>
+      <li><h3>Test against real cases</h3><p>Real conversations and real statements become the test set, so every change can be checked before it ships.</p></li>
+      <li><h3>Run it and stay close</h3><p>Monitoring, fixes and iteration after launch. The job isn’t done until the team stops doing it by hand.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="tools">
+  <div class="wrap">
+    <h2>What I use</h2>
+    <div class="tools">
+      <div><h3>Automation and AI</h3><p>n8n, Claude API, tool use, RAG, prompt engineering, regression evals, WhatsApp Cloud API</p></div>
+      <div><h3>Data and backend</h3><p>Supabase, PostgreSQL, SQL, row-level security, Python, JavaScript, REST APIs, webhooks</p></div>
+      <div><h3>Apps and infrastructure</h3><p>Next.js, React, Tailwind, Vercel, Docker, Linux VPS</p></div>
+      <div><h3>Business</h3><p>Treasury, reconciliation, invoicing, collections, cash-flow planning, direct sales to business owners</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h2>Looking for someone to automate your operations? Let’s talk.</h2>
+    <div class="contact">
+      <a href="mailto:peecoulter7@gmail.com">peecoulter7@gmail.com</a>
+      <a href="https://github.com/Pedroor7">github.com/Pedroor7</a>
+    </div>
+    <p class="fine">Available for remote work, 20 to 30 hours a week. Spanish native, working English. Co-founder of FLUXX AI, an automation agency for small businesses.</p>
+  </div>
+</footer>
+
+</body>
+</html>
